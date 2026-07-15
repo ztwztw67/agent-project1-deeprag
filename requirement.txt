@@ -1,0 +1,36 @@
+# ========== Web 框架 ==========
+fastapi==0.115.14           # 0.115.x 最新补丁（2025-06），稳定
+uvicorn[standard]==0.34.3   # 0.34.x 最新补丁
+
+# ========== 配置管理 ==========
+pydantic-settings==2.14.2   # 最新稳定版
+
+# ========== 数据库（SQLAlchemy 2.0 风格） ==========
+sqlalchemy==2.0.51          # 2.0.x 最新补丁
+aiomysql==0.3.2             # MySQL 异步驱动，最新稳定版
+redis==5.3.1                # Redis 客户端，5.x 最新稳定版
+
+# ========== 认证 ==========
+python-jose[cryptography]==3.5.0   # JWT 生成/校验，最新稳定版
+passlib[bcrypt]==1.7.4             # 密码哈希（已停止更新，这是最终版）
+bcrypt==4.0.1                   # ⚠️ 必须锁版本：passlib 1.7.4 与 bcrypt 4.1+ 不兼容
+                                # bcrypt 4.1+ 删除了 __about__ 属性，passlib 依赖它
+                                # 这个 bug 的表现：AttributeError: module 'bcrypt' has no attribute '__about__'
+
+# ========== HTTP 客户端（Agent 调用外部 API 用） ==========
+httpx==0.28.1               # 异步 HTTP 客户端
+
+# ========== LLM 框架（后续项目用，先装上） ==========
+# ⚠️ 版本锁定原因：文档中所有代码基于 LangChain 0.3.x API（create_react_agent、AgentExecutor 等）
+# 1.x 版本 API 有破坏性变更，如果升到 1.x，代码示例无法直接运行
+# 项目学习阶段用 0.3.x 即可——学会核心概念后，升 1.x 只是换几个 import 路径
+langchain==0.3.30           # 0.3.x 最新补丁
+langchain-openai==0.3.35    # 0.3.x 最新补丁
+langchain-community==0.3.31 # 0.3.x 最新补丁
+
+# ========== 向量数据库（Project 1 用） ==========
+# ⚠️ Chroma 1.x API 有较大变化，锁在 0.6.x
+chromadb==0.6.3             # 0.6.x 最新版（0.x 最后一个版本）
+
+# ========== 工具 ==========
+python-multipart==0.0.32    # 文件上传支持，最新稳定版

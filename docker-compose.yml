@@ -1,0 +1,55 @@
+# Docker Compose V2 中 version 字段已废弃，直接写 services 即可
+services:
+  # ========== FastAPI 应用 ==========
+  api:
+    build: .
+    container_name: agent-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env  # 从 .env 文件加载环境变量
+    volumes:
+      # 开发时挂载源码目录，代码改动后自动生效（uvicorn --reload）
+      - .:/app
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ========== MySQL 数据库 ==========
+  mysql:
+    image: mysql:8.0
+    container_name: agent-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-your_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-agent_db}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql  # 数据持久化，容器删了数据还在
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ========== Redis 缓存 ==========
+  redis:
+    image: redis:7-alpine
+    container_name: agent-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+# ========== 数据卷 ==========
+volumes:
+  mysql_data:
+  redis_data:
