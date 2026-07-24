@@ -1,0 +1,53 @@
+# ========== Web 框架 ==========
+fastapi==0.139.0
+uvicorn[standard]==0.50.0
+
+# ========== 配置管理 ==========
+pydantic-settings==2.14.2
+
+# ========== 数据库（SQLAlchemy 2.0 风格） ==========
+sqlalchemy==2.0.51
+aiomysql==0.3.2
+pymysql==1.1.2              # MySQL 同步驱动（SQL Agent 用），纯 Python 无需编译
+redis==5.3.1
+
+# ========== 认证 ==========
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+bcrypt==5.0.0                    # ⚠️ 注意：若用 passlib 1.7.4 需 bcrypt==4.0.1（见 README 说明）
+
+# ========== HTTP 客户端 ==========
+httpx==0.28.1
+
+# ========== OpenAI 客户端（直接调用 DeepSeek API，非 LangChain 封装） ==========
+openai==2.45.0
+
+# ========== LLM 框架 ==========
+# ⚠️ 锁在 0.3.x——1.x API 有破坏性变更，README 中所有代码示例基于 0.3.x
+langchain==0.3.30
+langchain-openai==0.3.35
+langchain-community==0.3.31
+
+# ========== 向量数据库 ==========
+chromadb==0.6.3                  # ⚠️ Chroma 1.x API 有较大变化，锁在 0.6.x
+
+# ========== Embedding & Rerank 模型依赖 ==========
+# HuggingFaceBgeEmbeddings + CrossEncoderReranker 底层都需要
+sentence-transformers==5.6.0
+
+# ========== 混合检索（v3 用） ==========
+rank-bm25==0.2.2                 # BM25Retriever 的关键词检索算法
+
+# ========== Web 搜索（v2 用） ==========
+tavily-python==0.7.26
+
+# ========== 多 Agent 编排（Project 2 用） ==========
+langgraph==0.2.76                # ⚠️ 锁在 0.2.x——与 langchain 0.3.x 兼容
+
+# ========== MCP 协议（Project 2 v3 用） ==========
+mcp==1.28.1
+
+# ========== 工具 ==========
+python-multipart==0.0.32
+
+pymupdf>=1.28.0

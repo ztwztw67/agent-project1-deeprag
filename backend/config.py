@@ -63,6 +63,8 @@ class Settings(BaseSettings):
     llm_model: str = "deepseek-chat"
     llm_reasoning_effort: str = "high"  # v4-pro 推理深度：low / medium / high
     llm_thinking: str = "enabled"  # enabled = 开启思维链，disabled = 直出答案
+    # ========== 外部工具 ==========
+    tavily_api_key: Optional[str] = None  # Tavily Web Search API（v2 agent_tools 用）
 
 
 # 全局唯一实例 —— 其他模块统一 from backend.config import settings

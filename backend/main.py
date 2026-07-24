@@ -3,13 +3,17 @@ FastAPI 应用入口
 ===============
 整个后端从这里启动。所有路由、中间件、生命周期事件在这里注册。
 """
+import logging
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import settings
-from backend.routers import auth
 from backend.middleware.log import LogMiddleware
+from backend.routers import auth, rag
+
+logger = logging.getLogger("agent-project")
 
 
 # lifespan：替代旧版 on_event("startup") / on_event("shutdown")
@@ -17,12 +21,12 @@ from backend.middleware.log import LogMiddleware
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # ===== 启动时执行 =====
-    print(f"🚀 {settings.app_name} 启动中...")
-    print(f"   环境: {settings.app_env}")
-    print(f"   LLM: {settings.llm_model} @ {settings.openai_base_url}")
+    logger.info("%s v%s 启动 (env=%s, llm=%s @ %s)",
+                settings.app_name, "0.1.0", settings.app_env,
+                settings.llm_model, settings.openai_base_url)
     yield  # ← 应用在这里运行
     # ===== 关闭时执行 =====
-    print("👋 正在关闭...")
+    logger.info("%s 正在关闭...", settings.app_name)
 
 
 # 创建 FastAPI 应用 —— 这是整个后端的"大脑"
@@ -49,12 +53,10 @@ app.add_middleware(LogMiddleware)
 
 # ===== 路由注册 =====
 # prefix="/auth" 意味着 auth.router 里的所有路径都自动加上 /auth
-# 比如 @router.post("/register") 的实际访问路径是 POST /auth/register
 app.include_router(auth.router, prefix="/auth", tags=["认证"])
 
 # 后续添加新模块只需加一行：
-# app.include_router(chat.router, prefix="/chat", tags=["聊天"])
-# app.include_router(rag.router, prefix="/rag", tags=["RAG"])
+app.include_router(rag.router, prefix="/rag", tags=["RAG"])
 
 
 # ===== 基础接口 =====
